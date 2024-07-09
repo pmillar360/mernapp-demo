@@ -8,7 +8,8 @@ import {
 import Layout from "./layouts/Layout";
 import Register from "./pages/Register";
 import LogIn from "./pages/LogIn";
-// import AddHotel from "./pages/AddHotel";
+import AddHotel from "./pages/AddHotel";
+import { useAppContext } from "./contexts/AppContext";
 // import { useAppContext } from "./contexts/AppContext";
 // import MyHotels from "./pages/MyHotels";
 // import EditHotel from "./pages/EditHotel";
@@ -19,6 +20,8 @@ import LogIn from "./pages/LogIn";
 // import Home from "./pages/Home";
 
 const App = () => {
+  const { isLoggedIn } = useAppContext();
+
   return (
     <Router>
       <Routes>
@@ -39,6 +42,13 @@ const App = () => {
             <LogIn />
           </Layout>
         } />
+        {isLoggedIn && (<>
+          <Route path="/add-hotel" element={
+          <Layout>
+            <AddHotel />
+          </Layout>
+        } />
+        </>)}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
