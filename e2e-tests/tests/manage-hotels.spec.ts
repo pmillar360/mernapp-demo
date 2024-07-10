@@ -24,7 +24,7 @@ await page.goto(`${UI_URL}`);
   await expect(page.getByText("User signed in successfully")).toBeVisible();
 });
 
-test("should allow user to add a hotel", async ({ page}) => {
+test("should allow user to add a hotel", async ({ page }) => {
     await page.goto(`${UI_URL}/add-hotel`);
 
     await page.locator('[name="name"]').fill("Test Hotel");
@@ -49,4 +49,22 @@ test("should allow user to add a hotel", async ({ page}) => {
     await page.getByRole("button", { name: "Save" } ).click();
 
     await expect(page.getByText("Hotel added successfully")).toBeVisible();
-})
+});
+
+test("should allow user to view their hotels", async ({ page }) => {
+    await page.goto(`${UI_URL}/my-hotels`);
+
+    await expect(page.getByText("My Hotels")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Add Hotel" })).toBeVisible();
+
+    await expect(page.getByText("Test Hotel").first()).toBeVisible();
+    await expect(page.getByText("Test Description").first()).toBeVisible();
+    await expect(page.getByText("Test City, Test Country").first()).toBeVisible();
+    await expect(page.getByText("Hostel").first()).toBeVisible();
+    await expect(page.getByText("$100 / night").first()).toBeVisible();
+    await expect(page.getByText("2 adults, 3 children").first()).toBeVisible();
+    await expect(page.getByText("3 stars").first()).toBeVisible();
+
+    // check for button to be present
+    await expect(page.getByRole("link", { name: "View Details" }).first()).toBeVisible();
+});

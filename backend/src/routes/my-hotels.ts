@@ -61,4 +61,14 @@ router.post(
         }
 });
 
+router.get("/", verifyToken, async (req: Request, res: Response) => {
+    try {
+        const hotels = await Hotel.find({ userId: req.userId as string }); // Find all hotels created by the authenticated user
+    
+        res.json(hotels);        
+    } catch (error) {
+        res.status(500).json({ message: "Something went wrong."});        
+    }
+});
+
 export default router;
