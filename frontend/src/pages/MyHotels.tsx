@@ -26,7 +26,13 @@ const MyHotels = () => {
             <div className="grid grid-cols-1 gap-8">
                 {hotelData?.map((hotel) => (
                     <div key={hotel._id} className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5">
-                        {/* <image src={hotel.imageUrls[0]} alt={hotel.name} className="w-full h-64 object-cover rounded-lg"/> */}
+                        {hotel.imageUrls.length > 0 && (
+                            <img src={hotel.imageUrls[0]} alt={hotel.name} className="w-full h-64 object-cover rounded-lg"/>
+                        )}
+                        {hotel.imageUrls.length === 0 && (
+                            <div>No picture</div>
+                        )}
+
                         <h2 className="text-2xl font-bold">{hotel.name}</h2>
                         <div className="whitespace-pre-line">{hotel.description}</div>
                         <div className="grid grid-cols-5 gap-2">

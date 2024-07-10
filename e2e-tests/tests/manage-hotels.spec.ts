@@ -68,3 +68,33 @@ test("should allow user to view their hotels", async ({ page }) => {
     // check for button to be present
     await expect(page.getByRole("link", { name: "View Details" }).first()).toBeVisible();
 });
+
+test("should allow user to edit a hotel", async ({ page }) => {
+    await page.goto(`${UI_URL}/my-hotels`);
+
+    await page.getByRole("link", { name: "View Details" }).first().click();
+
+    await page.locator('[name="name"]').fill("Updated Test Hotel");
+    await page.locator('[name="city"]').fill("Updated Test City");
+    await page.locator('[name="country"]').fill("Updated Test Country");
+    await page.locator('[name="description"]').fill("Updated Test Description");
+    await page.locator('[name="pricePerNight"]').fill("200");
+
+    await page.selectOption('select[name="starRating"]', "4");
+
+    // await page.getByLabel("Hotel").click();
+    // await page.getByLabel("Wi-Fi").check();
+    // await page.getByLabel("Parking").check();
+    // await page.getByLabel("Gym").check();
+
+    await page.locator('[name="adultCount"]').fill("3");
+    await page.locator('[name="childCount"]').fill("4");
+
+    // await page.setInputFiles('[name="imageFiles"]', [
+    //     path.join(__dirname, "files", "jwst-deep-field.png")
+    // ]);
+
+    await page.getByRole("button", { name: "Save" } ).click();
+
+    await expect(page.getByText("Hotel updated successfully")).toBeVisible();
+});

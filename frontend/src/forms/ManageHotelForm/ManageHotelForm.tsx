@@ -4,6 +4,8 @@ import TypeSection from "./TypeSection";
 import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
+import { HotelType } from "../../../../backend/src/shared/types";
+import { useEffect } from "react";
 
 export type HotelFormData = {
     name: string;
@@ -15,23 +17,34 @@ export type HotelFormData = {
     starRating: number;
     facilities: string[];
     imageFiles: FileList;
+    imageUrls: string[];
     adultCount: number;
     childCount: number;
 }
 
 type Props = {
-    onSave: (hotelFormData: FormData) => void
-    isLoading: boolean
+    onSave: (hotelFormData: FormData) => void;
+    isLoading: boolean;
+    hotel?: HotelType;
 }
 
-const ManageHotelForm = ({onSave, isLoading}: Props) => {
+const ManageHotelForm = ({onSave, isLoading, hotel}: Props) => {
     const formMethods = useForm<HotelFormData>();
-    const { handleSubmit } = formMethods;
+    const { handleSubmit, reset } = formMethods;
+
+    useEffect(() => { // Reset the form when the hotel changes
+        reset(hotel);
+    }, [hotel, reset]);
 
     const onSubmit = handleSubmit((data: HotelFormData) => {
         // console.log(data);
         // Create a new FormData object for the API
         const formData = new FormData();
+
+        if (hotel) {
+            formData.append("hotelId", hotel._id); // Add the hotelId if it exists (for updating)             
+        }
+
         formData.append("name", data.name);
         formData.append("city", data.city);
         formData.append("country", data.country);
@@ -42,11 +55,17 @@ const ManageHotelForm = ({onSave, isLoading}: Props) => {
         formData.append("adultCount", data.adultCount.toString());
         formData.append("childCount", data.childCount.toString());
 
-        // formData.append("facilities", JSON.stringify(data.facilities)); // Maybe this works?
+        // formData.append("facilities", JSON.stringify(data.facilities)); // Maybe this works instead of the following code?
 
         data.facilities.forEach((facility, index) => {
             formData.append(`facilities[${index}]`, facility)
         });
+
+        if (data.imageUrls) {
+            data.imageUrls.forEach((url, index) => {
+                formData.append(`imageUrls[${index}]`, url);
+            });            
+        }
 
         Array.from(data.imageFiles).forEach((file) => {
             formData.append("imageFiles", file);
