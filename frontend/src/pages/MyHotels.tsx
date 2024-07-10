@@ -6,11 +6,12 @@ import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 
 const MyHotels = () => {
 
-    const { data: hotelData } = useQuery("fetchMyHotels", apiClient.fetchMyHotels, () => {
-        onError: () => {
-
-        }
-    })
+    const { data: hotelData } = useQuery(
+    "fetchMyHotels",
+    apiClient.fetchMyHotels,
+    {
+      onError: () => {},
+    });
 
     if (!hotelData || hotelData.length === 0) {
         return <p>No hotels found</p>
