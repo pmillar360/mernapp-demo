@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import { v2 as cloudinary } from 'cloudinary';
 import myHotelRoutes from './routes/my-hotels';
+import hotelRoutes from './routes/hotels';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, "../../frontend/dist"))); // Serve t
 app.use("/api/auth", authRoutes); // All routes in the authRoutes will be prefixed with /api/auth
 app.use("/api/users", userRoutes); // All routes in the userRoutes will be prefixed with /api/users
 app.use("/api/my-hotels", myHotelRoutes); // All routes in the myHotelRoutes will be prefixed with /api/my-hotels
+app.use("/api/hotels", hotelRoutes); // All routes in the hotelRoutes will be prefixed with /api/hotels
 
 app.get("*", (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "../../frontend/dist/index.html")); // Send the index.html file if the route is not recognized

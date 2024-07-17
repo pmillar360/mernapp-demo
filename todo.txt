@@ -1,0 +1,10 @@
+- [ ] Improve tests
+    - Find a way to have the data set up and then cleaned up before/after each tests
+    - Don't want to spam the database with test data every time its run
+    - Alternatively ensure that the tests run in a certain order such that things can be created and deleted as part of the test cycle
+- [ ] generate more hotels to test pagination
+- reduce number of facilities and types?
+- change price filter to a range
+    - either a price range (2 slider inputs)
+    - or a slider for just max price
+- can e2e tests clear the db and then generate data before testing and then clear afterwards
