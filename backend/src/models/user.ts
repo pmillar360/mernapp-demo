@@ -1,17 +1,10 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { UserType } from '../shared/types';
 
 /**
  * User model is used to store user information in the database.
  */
-
-export type UserType = {
-    _id: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-};
 
 // Define the schema for the user model
 const userSchema = new mongoose.Schema({

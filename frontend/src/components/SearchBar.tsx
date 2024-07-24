@@ -4,10 +4,12 @@ import { MdTravelExplore } from "react-icons/md";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../contexts/AppContext";
 
 const SearchBar = () => {
     const search = useSearchContext();
     const navigate = useNavigate();
+    const {showToast} = useAppContext();
 
     const [destination, setDestination] = useState<string>(search.destination);
     const [checkIn, setCheckIn] = useState<Date>(search.checkIn);
@@ -18,6 +20,11 @@ const SearchBar = () => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
+        if (checkIn && checkOut && checkIn >= checkOut) {
+            showToast({message: "Check-out date must be after check-in date", type: "error"});
+            return;
+        }
+
         search.saveSearchValues(destination, checkIn, checkOut, adultCount, childCount);
 
         navigate("/search")
@@ -26,7 +33,9 @@ const SearchBar = () => {
     const handleReset = () => {
         setDestination("");
         setCheckIn(new Date());
-        setCheckOut(new Date());
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        setCheckOut(tomorrow);
         setAdultCount(1);
         setChildCount(0);
     };
@@ -53,10 +62,10 @@ const SearchBar = () => {
                 </label>
             </div>
             <div>
-                <DatePicker selected={checkIn} onChange={(date) => setCheckIn(date as Date)} selectsStart startDate={checkIn} endDate={checkOut} minDate={minDate} maxDate={maxDate} placeholderText="Check in Date" className="min-w-full bg-white p-2 focus:outline-none" wrapperClassName="min-w-full"/>
+                <DatePicker selected={checkIn} onChange={(date) => setCheckIn(date as Date)} selectsStart startDate={checkIn} endDate={checkOut} minDate={minDate} maxDate={maxDate} placeholderText="Check-in Date" className="min-w-full bg-white p-2 focus:outline-none" wrapperClassName="min-w-full"/>
             </div>
             <div>
-                <DatePicker selected={checkOut} onChange={(date) => setCheckOut(date as Date)} selectsEnd startDate={checkIn} endDate={checkOut} minDate={minDate} maxDate={maxDate} placeholderText="Check out Date" className="min-w-full bg-white p-2 focus:outline-none" wrapperClassName="min-w-full"/>
+                <DatePicker selected={checkOut} onChange={(date) => setCheckOut(date as Date)} selectsEnd startDate={checkIn} endDate={checkOut} minDate={minDate} maxDate={maxDate} placeholderText="Check-out Date" className="min-w-full bg-white p-2 focus:outline-none" wrapperClassName="min-w-full"/>
             </div>
             <div>
                 <button className="w-2/3 bg-blue-600 text-white h-full p-2 font-bold text-xl hover:bg-blue-500">Search</button>
