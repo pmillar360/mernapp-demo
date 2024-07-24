@@ -19,7 +19,11 @@ type SearchContextProviderProps = {
 export const SearchContextProvider = ({children}: SearchContextProviderProps) => {
     const [destination, setDestination] = useState<string>(() => sessionStorage.getItem("destination") || "");
     const [checkIn, setCheckIn] = useState<Date>(() => new Date(sessionStorage.getItem("checkIn") || new Date().toISOString()));
-    const [checkOut, setCheckOut] = useState<Date>(() => new Date(sessionStorage.getItem("checkOut") || new Date().toISOString()));
+
+    var threeDaysFromNow = new Date();
+    threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+
+    const [checkOut, setCheckOut] = useState<Date>(() => new Date(sessionStorage.getItem("checkOut") || threeDaysFromNow.toISOString()));
     const [adultCount, setAdultCount] = useState<number>(() => parseInt(sessionStorage.getItem("adultCount") || "1"));
     const [childCount, setChildCount] = useState<number>(() => parseInt(sessionStorage.getItem("childCount") || "0"));
     const [hotelId, setHotelId] = useState<string>(() => sessionStorage.getItem("hotelId") || "");
