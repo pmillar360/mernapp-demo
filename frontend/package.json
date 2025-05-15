@@ -36,7 +36,7 @@
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "vite": "^6.3.5"
   },
   "homepage": "https://pmillar360.github.io/mernapp-demo"
 }
