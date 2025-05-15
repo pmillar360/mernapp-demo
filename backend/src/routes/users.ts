@@ -13,7 +13,8 @@ router.get("/me", verifyToken, async (req: Request, res: Response) => {
         const user = await User.findById(userId).select("-password"); // Exclude the password from the query
 
         if (!user) {
-            return res.status(404).json({message: "User not found"});
+            res.status(404).json({message: "User not found"});
+            return;
         }
 
         res.json(user);
@@ -34,7 +35,8 @@ router.post("/register", [
 
     // If there are validation errors, return them
     if (!errors.isEmpty()) {
-        return res.status(400).json({message: errors.array()});
+        res.status(400).json({message: errors.array()});
+        return;
     }
 
     try {
@@ -45,7 +47,8 @@ router.post("/register", [
 
         //If user exists, return an error
         if (user) {
-            return res.status(400).json({message: "User already exists"});
+            res.status(400).json({message: "User already exists"});
+            return;
         }
 
         //Create a new user instance
@@ -72,7 +75,7 @@ router.post("/register", [
         const userEmail = req.body.email;
 
         // Send a success message to the client
-        return res.status(200).send({message: `User ${userEmail} registered successfully`});
+        res.status(200).send({message: `User ${userEmail} registered successfully`});
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Server Error"});

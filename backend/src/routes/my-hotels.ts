@@ -69,7 +69,8 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
         const hotel = await Hotel.findOne({ _id: req.params.id as string, userId: req.userId as string }); // Find the hotel by id and userId
         
         if (!hotel) {
-            return res.status(404).json({ message: "Hotel not found."});
+            res.status(404).json({ message: "Hotel not found."});
+            return;
         }
 
         res.json(hotel);
@@ -89,7 +90,8 @@ router.put("/:hotelId", verifyToken, upload.array("imageFiles"), async (req: Req
         }, updatedHotel, { new: true});
 
         if (!hotel) {
-            return res.status(404).json({ message: "Hotel not found."});
+            res.status(404).json({ message: "Hotel not found."});
+            return;
         }
 
         const files = req.files as Express.Multer.File[]; // Get the files from the request

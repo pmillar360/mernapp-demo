@@ -14,7 +14,8 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies["auth_token"]; // Get the token from the cookie
 
     if (!token) {
-        return res.status(401).json({message: "Access denied"});
+        res.status(401).json({message: "Access denied"});
+        return;
     }
 
     try {
@@ -24,7 +25,8 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 
         next();
     } catch (error) {
-        return res.status(401).json({message: "Access denied"});
+        res.status(401).json({message: "Access denied"});
+        return;
     }
 }
 

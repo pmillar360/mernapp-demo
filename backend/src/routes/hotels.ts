@@ -72,7 +72,8 @@ router.get("/:id", [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        res.status(400).json({errors: errors.array()});
+        return;
     }
 
     const id = req.params.id.toString();
@@ -94,7 +95,8 @@ router.post("/:hotelId/bookings/payment-intent", verifyToken, async (req: Reques
     const hotel = await Hotel.findById(hotelId);
 
     if (!hotel) {
-        return res.status(404).json({ message: "Hotel not found" });
+        res.status(404).json({ message: "Hotel not found" });
+        return;
     }
 
     const totalCost = numberOfNights * hotel.pricePerNight; // Calculate the total cost of the booking based on the number of nights and the price per night on the backend to prevent tampering with the price on the frontend
@@ -109,7 +111,8 @@ router.post("/:hotelId/bookings/payment-intent", verifyToken, async (req: Reques
     });
 
     if (!paymentIntent.client_secret) {
-        return res.status(500).json({ message: "Failed to create payment intent" });
+        res.status(500).json({ message: "Failed to create payment intent" });
+        return;
     }
 
     const response = {
@@ -129,16 +132,19 @@ router.post("/:hotelId/bookings", verifyToken, async (req: Request, res: Respons
 
         if (!paymentIntent) {
             console.log("Payment intent not found");
-            return res.status(404).json({ message: "Payment intent not found" });
+            res.status(404).json({ message: "Payment intent not found" });
+            return;
         }
 
         if (paymentIntent.metadata.hotelId != req.params.hotelId || 
             paymentIntent.metadata.userId != req.userId) {
-            return res.status(403).json({ message: "Unauthorized" });
+            res.status(403).json({ message: "Unauthorized" });
+            return;
         }
 
         if (paymentIntent.status !== "succeeded") {
-            return res.status(400).json({ message: `Payment failed: ${paymentIntent.status}` });
+            res.status(400).json({ message: `Payment failed: ${paymentIntent.status}` });
+            return;
         }
 
         const newBooking: BookingType = {
@@ -150,7 +156,8 @@ router.post("/:hotelId/bookings", verifyToken, async (req: Request, res: Respons
         });
 
         if (!hotel) {
-            return res.status(404).json({ message: "Hotel not found" });
+            res.status(404).json({ message: "Hotel not found" });
+            return;
         }
 
         await hotel.save();

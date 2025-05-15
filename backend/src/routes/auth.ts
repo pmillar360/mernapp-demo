@@ -14,7 +14,8 @@ router.post("/login", [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({message: errors.array()});
+        res.status(400).json({message: errors.array()});
+        return;
     }
 
     const {email, password} = req.body; // Destructure email and password from the request body
@@ -23,13 +24,15 @@ router.post("/login", [
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({message: "Invalid credentials"});
+            res.status(400).json({message: "Invalid credentials"});
+            return;
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(400).json({message: "Invalid credentials"});
+            res.status(400).json({message: "Invalid credentials"});
+            return;
         }
 
         // Create a JWT token
